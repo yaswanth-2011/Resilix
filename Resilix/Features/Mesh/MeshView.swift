@@ -54,7 +54,8 @@ struct MeshView: View {
     @State private var showDiagnostics: Bool = false
     @State private var testMessage: String?
 
-    private let userCoordinate = CLLocationCoordinate2D(latitude: 37.3349, longitude: -122.0090)
+    /// Real device position; `nil` until the system delivers a fix.
+    private var userCoordinate: CLLocationCoordinate2D? { app.locationService.coordinate }
 
     var body: some View {
         NavigationStack {
@@ -360,16 +361,14 @@ private struct MeshActionRow: View {
 // MARK: - Apple Maps Network View
 struct MeshAppleMapView: View {
     let peers: [MeshPeer]
-    let userCoordinate: CLLocationCoordinate2D
+    /// Real device position, `nil` when there is no fix yet.
+    let userCoordinate: CLLocationCoordinate2D?
     let pulse: Bool
     let onSelect: (MeshPeer) -> Void
 
-    @State private var cameraPosition: MapCameraPosition = .region(
-        MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 37.3349, longitude: -122.0090),
-            span: MKCoordinateSpan(latitudeDelta: 0.012, longitudeDelta: 0.012)
-        )
-    )
+    /// Follows the device's own position; the automatic fallback covers the
+    /// moment before the first fix instead of showing a made-up city.
+    @State private var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
 
     private func lineColor(for hop: MeshPeer.HopType) -> Color {
         MeshColors.pin(for: hop)
@@ -380,19 +379,23 @@ struct MeshAppleMapView: View {
             // The map
             ZStack(alignment: .topTrailing) {
                 Map(position: $cameraPosition, interactionModes: [.pan, .zoom]) {
-                    // "You" center node
-                    Annotation("You", coordinate: userCoordinate) {
-                        YouMapPin()
+                    // "You" centre node — only where the device really is.
+                    if let userCoordinate {
+                        Annotation("You", coordinate: userCoordinate) {
+                            YouMapPin()
+                        }
                     }
 
                     // Dotted mesh connection lines (You → peer)
-                    ForEach(peers) { peer in
-                        if let coordinate = peer.coordinate {
-                            MapPolyline(coordinates: [userCoordinate, coordinate])
-                                .stroke(
-                                    lineColor(for: peer.hopType).opacity(0.65),
-                                    style: StrokeStyle(lineWidth: 1.6, lineCap: .round, dash: [5, 4])
-                                )
+                    if let userCoordinate {
+                        ForEach(peers) { peer in
+                            if let coordinate = peer.coordinate {
+                                MapPolyline(coordinates: [userCoordinate, coordinate])
+                                    .stroke(
+                                        lineColor(for: peer.hopType).opacity(0.65),
+                                        style: StrokeStyle(lineWidth: 1.6, lineCap: .round, dash: [5, 4])
+                                    )
+                            }
                         }
                     }
 

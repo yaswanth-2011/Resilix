@@ -157,7 +157,10 @@ class ResilixAppModel: ObservableObject {
         await meshController.start()
         isMeshRunning = true
 
-        // Location sharing (only when the user enabled it).
+        // The map and the distance to peers need the device's own position even
+        // when the user does not want to share it, so updates start regardless.
+        // Sharing is what `startLocationSharingIfEnabled` gates below.
+        startLocationUpdates()
         startLocationSharingIfEnabled()
 
         // Persisted conversations, SOS history and map resources. Without these
@@ -206,15 +209,25 @@ class ResilixAppModel: ObservableObject {
         }
     }
 
+    /// Asks for the location permission once and starts the GPS.
+    ///
+    /// Without this the map had no fix at all unless the user turned on
+    /// location sharing, which made every map look like a fixed demo city.
+    /// The position never leaves the device on its own — only
+    /// `startLocationSharingIfEnabled` sends it to the mesh.
+    private func startLocationUpdates() {
+        locationService.requestPermission()
+        locationService.startUpdates()
+    }
+
     /// Shares the own position with the mesh when the user allowed it.
     private func startLocationSharingIfEnabled() {
         locationTask?.cancel()
         guard settings.locationSharingEnabled else {
-            locationService.stopUpdates()
+            locationTask = nil
             return
         }
-        locationService.requestPermission()
-        locationService.startUpdates()
+        startLocationUpdates()
         lastSharedLatitude = nil
         lastSharedLongitude = nil
         locationTask = Task { @MainActor [weak self] in

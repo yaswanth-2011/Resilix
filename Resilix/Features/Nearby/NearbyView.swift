@@ -57,13 +57,11 @@ struct NearbyView: View {
     @State private var pulsePhase: CGFloat = 0
     @State private var hasAppeared = false
     @Namespace private var scanNamespace
-    @State private var mapPosition: MapCameraPosition = .region(
-        MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 37.3349, longitude: -122.0090),
-            span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015)
-        )
-    )
-    private let userCoordinate = CLLocationCoordinate2D(latitude: 37.3349, longitude: -122.0090)
+    /// Follows the device's own position; the automatic fallback covers the
+    /// period before the first fix.
+    @State private var mapPosition: MapCameraPosition = .userLocation(fallback: .automatic)
+    /// Real device position, `nil` until the system delivers a fix.
+    private var userCoordinate: CLLocationCoordinate2D? { app.locationService.coordinate }
     @State private var deviceCoordinates: [CLLocationCoordinate2D] = []
     /// Node id of the peer whose chat is being opened from a card.
     @State private var chatPeerID: String?
@@ -128,6 +126,14 @@ struct NearbyView: View {
                     hasAppeared = true
                     loadDemoDevices()
                 }
+            }
+            // A phone that appears while this screen is open has to show up
+            // without leaving and re-entering the tab.
+            .onChange(of: app.meshController.peers) { _, _ in
+                refreshDevices()
+            }
+            .onChange(of: app.meshController.connectedPeerIDs) { _, _ in
+                refreshDevices()
             }
         }
     }
@@ -228,13 +234,16 @@ struct NearbyView: View {
         ZStack {
             // Real Apple Map — no box behind, map fills the area
             Map(position: $mapPosition) {
-                // User iPhone — Find My style device image (iPhone)
-                Annotation("", coordinate: userCoordinate) {
-                    Image(systemName: "iphone.circle.fill")
-                        .font(.system(size: 34))
-                        .foregroundStyle(.white, ResilixTheme.brandCyan)
-                        .padding(3)
-                        .background(Circle().fill(Color.black.opacity(0.25)))
+                // User iPhone — Find My style device image (iPhone). Drawn only
+                // when the device really knows where it is.
+                if let userCoordinate {
+                    Annotation("", coordinate: userCoordinate) {
+                        Image(systemName: "iphone.circle.fill")
+                            .font(.system(size: 34))
+                            .foregroundStyle(.white, ResilixTheme.brandCyan)
+                            .padding(3)
+                            .background(Circle().fill(Color.black.opacity(0.25)))
+                    }
                 }
 
                 // Other devices — Find My style phone/device images
@@ -361,6 +370,15 @@ struct NearbyView: View {
         }
     }
 
+    /// Re-reads the device list after a discovery change.
+    ///
+    /// Only the real list is refreshed: the demo rows are owned by the demo
+    /// controller and are only loaded while demo mode is on.
+    private func refreshDevices() {
+        loadDemoDevices()
+        if scanState != .idle { generateDeviceCoordinates() }
+    }
+
     /// The pins are placed on the positions the peers really shared.
     private func generateDeviceCoordinates() {
         var coords: [CLLocationCoordinate2D] = []
@@ -426,19 +444,13 @@ struct NearbyView: View {
     /// that node and its stored history (if any) shows up. The seed is never
     /// displayed: the thread renders the persisted messages only.
     private func threadSeed(for peerID: String) -> MeshMessage {
-        MeshMessage(id: "nearby-\(peerID)",
-                    packetID: nil,
-                    threadID: peerID,
-                    sourceNodeID: peerID,
-                    destinationNodeID: peerID,
-                    text: "",
-                    createdAt: Date(),
-                    deliveryState: .queued,
-                    expirySeconds: nil,
-                    lastRoute: nil,
-                    priority: .normal,
-                    senderAlias: devices.first { $0.id == peerID }?.name,
-                    isOutgoing: true)
+        if let node = app.meshController.peers.first(where: { $0.id == peerID }) {
+            return MeshMessage.threadSeed(for: node)
+        }
+        return MeshMessage.threadSeed(for: MeshNode(id: peerID,
+                                                   alias: devices.first { $0.id == peerID }?.name ?? peerID,
+                                                   lastSeen: Date(),
+                                                   isRelay: false))
     }
 }
 

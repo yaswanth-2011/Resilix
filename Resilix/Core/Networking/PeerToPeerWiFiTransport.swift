@@ -173,6 +173,17 @@ final class PeerToPeerWiFiTransport: MeshTransport, @unchecked Sendable {
                                      transportHint: MeshTransportKind.peerToPeerWiFi.rawValue)
             endpoints[peerID] = result.endpoint
             eventCont?.yield(.peerDiscovered(id: peerID, alias: alias))
+
+            // Open the link as soon as a peer is seen. Without this a device
+            // found over Bonjour was listed but never carried a packet, so the
+            // only usable transport was Bluetooth. The handshake in
+            // `register(_:peerID:)` makes both sides exchange their keys.
+            if connections[peerID] == nil, connectionTasks[peerID] == nil {
+                Task { [weak self] in
+                    guard let self else { return }
+                    _ = try? await self.connect(to: peerID)
+                }
+            }
         }
     }
 

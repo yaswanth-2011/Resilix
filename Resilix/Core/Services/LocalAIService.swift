@@ -256,6 +256,19 @@ final class LocalAIService: ObservableObject {
         return runtime.generate(request: request)
     }
 
+    /// Appends one streamed piece to the answer.
+    ///
+    /// The contract is that a piece is a *delta*. A runtime that yields
+    /// cumulative snapshots is handled too (the snapshot replaces the text
+    /// instead of being appended to it), so a wrong assumption in one adapter
+    /// can never make the bubble repeat itself.
+    nonisolated static func appending(_ answer: String, _ piece: String) -> String {
+        if piece.isEmpty { return answer }
+        if answer.isEmpty { return piece }
+        if piece.hasPrefix(answer) { return piece }
+        return answer + piece
+    }
+
     /// Runs a prompt and appends the exchange to the persisted conversation.
     func askAndStore(prompt: String) async {
         isGenerating = true
@@ -266,7 +279,7 @@ final class LocalAIService: ObservableObject {
         var answer = ""
         do {
             for try await piece in ask(prompt: prompt) {
-                answer += piece
+                answer = Self.appending(answer, piece)
             }
             conversation.append(AIChatTurn(role: .assistant,
                                            text: answer,
@@ -301,8 +314,18 @@ final class LocalAIService: ObservableObject {
 
     /// Answers from the curated first-aid content that ships with the app.
     func knowledgeBaseAnswer(for question: String) -> String {
+        Self.knowledgeBaseAnswer(for: question)
+    }
+
+    /// The retrieval itself, usable without a service instance.
+    ///
+    /// Kept `nonisolated` so views that do not hold the service yet can still
+    /// answer from the same curated topics — there is exactly one place that
+    /// turns a question into medical text, so the assistant cannot give two
+    /// different answers for the same prompt.
+    nonisolated static func knowledgeBaseAnswer(for question: String,
+                                                topics: [FirstAidTopic] = OfflineFirstAidStore.allTopics) -> String {
         let query = question.lowercased()
-        let topics = OfflineFirstAidStore.allTopics
         let scored = topics.map { topic -> (FirstAidTopic, Int) in
             var score = 0
             if query.contains(topic.title.lowercased()) { score += 10 }

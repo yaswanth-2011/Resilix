@@ -77,7 +77,16 @@ final class MessageService: ObservableObject {
                                   isOutgoing: true)
         messages.append(message)
         await persist()
-        try await transmit(message)
+        do {
+            try await transmit(message)
+        } catch {
+            // The error reaches the caller *and* is recorded on the message,
+            // otherwise the row stays "queued" forever with nothing to retry.
+            update(messageID: message.id) { $0.deliveryState = .failed }
+            lastErrorMessage = error.localizedDescription
+            await persist()
+            throw error
+        }
         return message
     }
 
@@ -110,7 +119,16 @@ final class MessageService: ObservableObject {
                                                                     errorMessage: nil))
         messages.append(message)
         await persist()
-        try await transmit(message)
+        do {
+            try await transmit(message)
+        } catch {
+            // The error reaches the caller *and* is recorded on the message,
+            // otherwise the row stays "queued" forever with nothing to retry.
+            update(messageID: message.id) { $0.deliveryState = .failed }
+            lastErrorMessage = error.localizedDescription
+            await persist()
+            throw error
+        }
         return message
     }
 
@@ -160,6 +178,10 @@ final class MessageService: ObservableObject {
            !incoming.sourceNodeID.isEmpty {
             incoming.threadID = incoming.sourceNodeID
         }
+        // The sender encoded its own message with `isOutgoing = true`. On this
+        // device the message came *in*, otherwise every received bubble would be
+        // drawn on the right as if the user had written it.
+        incoming.isOutgoing = false
 
         if let existingIndex = messages.firstIndex(where: { $0.id == incoming.id }) {
             messages[existingIndex] = incoming

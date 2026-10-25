@@ -1,8 +1,8 @@
 # Resilix — Implementation Report
 
-**Repository:** `yaswanth-2011/Resilix` · **Branch:** `arena/2eab602c-resilix` · **Base commit:** `8c4295a` · **HEAD:** `e405e39` (code) — this document's last edit is the commit after it
+**Repository:** `yaswanth-2011/Resilix` · **Branch:** `arena/2eab602c-resilix` · **Base commit:** `8c4295a` · **HEAD:** see `git log -1` — this line goes stale with every commit, the branch itself is the reference
 **Target:** iOS 17.0+ · Swift 5 · `Resilix.xcodeproj` (app `com.resilix.app`) · schemes `Resilix`, `ResilixTests`
-**Scale:** 105 app sources + 9 test sources registered in the Xcode project, ~16,400 lines of Swift.
+**Scale:** 106 app sources + 9 test sources registered in the Xcode project, ~17,300 lines of Swift.
 
 ---
 
@@ -16,7 +16,7 @@
 | Physical device run (2–3 iPhones, BLE + P2P Wi-Fi, real relay) | **NOT PERFORMED** — no devices. |
 | Offline syntax validation | **PASS** — `Tools/swiftcheck.py` (tree-sitter-swift 0.7.4): **115/115 files parse with 0 errors**. |
 | Xcode project integrity | **PASS** — `Tools/sync_xcodeproj.py` + custom validator: brace balance 0, **0 dangling object references**, 105 app + 9 test files all present on disk and in their Sources phases, **no file on disk left out of a target**. |
-| Localisation catalog integrity | **PASS** — `Localizable.xcstrings` parses as JSON, **709 keys × 11 languages = 7,799 translated units**, every key fully translated, **0 missing keys, 0 untranslated entries, 0 placeholder mismatches, 0 orphan keys** (`Tools/l10n/audit_keys.py`). |
+| Localisation catalog integrity | **PASS** — `Localizable.xcstrings` parses as JSON, **702 keys × 11 languages = 7,722 translated units**, every key fully translated, **0 missing keys, 0 untranslated entries, 0 placeholder mismatches, 0 orphan keys** (`Tools/l10n/audit_keys.py`). |
 | Localised-screen literal sweep | **PASS** — `Tools/l10n/audit_uiliterals.py`: every SwiftUI `Text/Label/Button/navigationTitle/NavigationLink/…` literal resolves to a catalog key with 11 translations; **0 problems** (only empty/symbol-only literals remain, which carry no translatable text). |
 | Static semantic checks (9 tools) | **PASS** — `swiftcheck` 115/115 parse · `initcheck` 30 call sites / 0 mismatches · `enumcheck` 0 unknown members · `semanticcheck` 0 non-throwing `try`, 0 `lock` in async · `memberresolve` 256 receiver calls / 0 unknown symbols · `awaitcheck` 0 misplaced `await` · `capturecheck` 0 captured vars mutated in closures · `viewcheck` 0 dot-less modifiers, 0 weak captures in value types · `scopecheck` 320 types / 546 called identifiers, 0 unresolved. These are source-level heuristics, not a compiler: a green row means the five reported error classes are absent, not that the target compiles. |
 | Design-frozen check | **PASS** — the theme file diff contains **no numeric change**: all 32 colour tokens have identical RGB values before/after, all scalar spacing tokens and the `font()` helper are byte-identical. The only theme edit is the helper's internal shape (`dynamic` → `adaptive` with `RGB`/`RGBA` structs) and it is behaviour-identical. |
@@ -266,6 +266,28 @@ directions on a synthetic file. The same sweep then audited the whole tree:
 framework allowlist is accounted for. Reading-only identifiers (the
 `filledCount` shape) are still outside its reach — stated in the tool itself.
 
+### 0.10 Seventh round — Assist header, a repeating answer, real location, live peers
+
+Nothing here came from a compiler message; these were reported as behaviour.
+
+| Reported | Cause | Fix |
+|---|---|---|
+| "Assist: remove the logo so the heading and model name fit" | The header spent 36 pt of width on the wordmark, which pushed the title against the three action buttons and clipped the engine line. | The logo is gone from this header only (the wordmark stays on every other screen) and the engine line may shrink to 75 % instead of truncating. |
+| "The offline AI keeps repeating the answer" | `LanguageModelSession.streamResponse(to:)` yields a **cumulative** snapshot — element *n* already contains everything up to *n*. The Apple adapter forwarded each snapshot as if it were a delta, and both consumers do `answer += piece`, so the bubble read "H", "HHe", "HHeHey"… | The adapter now converts each snapshot into a delta against what it already emitted. `LocalAIService.appending(_:_:)` additionally treats a piece that starts with the whole answer as a snapshot rather than a delta, so one wrong adapter assumption can no longer duplicate text. |
+| Same answer "clear and correct" | Two answer engines existed: `OfflineAIEngine` (hard-coded keywords, six force-unwrapped lookups, English-only) and the curated `LocalAIService.knowledgeBaseAnswer` used by the model manager. Which one answered depended on whether the service had been attached yet. | `OfflineAIEngine` is deleted. There is one retrieval path, `LocalAIService.knowledgeBaseAnswer(for:topics:)`, `nonisolated` so the view can call it before the service exists. An unmatched question lists the topics that are covered instead of returning a generic paragraph. |
+| "Regenerate" duplicated the question | `regenerate()` called `send()`, which appends the user bubble again. | It removes the previous answer and re-asks without touching the transcript. |
+| "The offline maps should use real location" | Two problems: (a) `startUpdates()` only ran when *location sharing* was enabled, so the map usually had no fix at all; (b) three screens fell back to a hard-coded San Francisco coordinate, so a "You" marker sat in California. | The app always asks for the location permission and starts the GPS; sharing to the mesh is still opt-in. The fallback coordinate is deleted in `SurvivalMapView`, `MeshView` and `NearbyView`: `userCoordinate` is optional, the marker and the route lines are drawn only from a real fix, and the camera uses `.userLocation(fallback: .automatic)`. |
+| "Mesh, chats and nearby should actually work and show nearby phones" | Four defects: the chat list printed **one row per message**; a discovered phone could not be messaged at all (no row, no compose action); a received message kept `isOutgoing = true`, so incoming bubbles were drawn as yours; and the mesh status pill was a `@State` bool flipped by tapping it. | The list is one row per thread, plus one row per discovered peer that has no history yet (tapping it opens an empty thread addressed to that node). Received messages are re-keyed by sender **and** marked incoming. The pill reads `connectedPeerIDs`. |
+| Nearby was a snapshot | `loadDemoDevices()` ran once on appear, so a phone that appeared while the tab was open never showed up. | `.onChange` on `peers` and `connectedPeerIDs` refreshes the list and the map pins. |
+| Bonjour peers never carried a packet | The Wi-Fi transport browsed and listed peers but nothing ever opened a connection; only Bluetooth connected on discovery. | A discovered peer is connected immediately, which exchanges the handshake and makes the TCP path usable for larger payloads. |
+| Failed sends stayed "queued" forever | `send` appended the message, then let `transmit` throw; the state was never changed and `processQueue` only retries the relay queue. | Both send paths mark the message `.failed` and keep the error, so the existing retry affordance applies. |
+
+`Tools/l10n/prune_keys.py` was added: `merge.py` copies every row of every
+translation table into the catalog, including rows for strings that no longer
+exist, which resurrects pruned keys (it took the catalog from 702 to 785 here).
+The prune step removes those entries and the stale rows, so the workflow is
+`merge.py` → `prune_keys.py`.
+
 ---
 
 ## 1. What was implemented
@@ -381,11 +403,11 @@ MBTiles (SQLite) packs and tile directories imported by the user into the app co
 |---|---|---|
 | English | en | source language (fallback) |
 | Hindi, Telugu, Tamil, Kannada, Malayalam | hi, te, ta, kn, ml | **784 / 784 keys** |
-| Marathi, Bengali, Gujarati, Punjabi, Urdu | mr, bn, gu, pa, ur | **709 / 709 keys** |
+| Marathi, Bengali, Gujarati, Punjabi, Urdu | mr, bn, gu, pa, ur | **702 / 702 keys** |
 
-**Catalog totals:** 709 keys × 11 languages = **7,799 translated string units** in `Resilix/Resources/Localizable.xcstrings`.
+**Catalog totals:** 702 keys × 11 languages = **7,722 translated string units** in `Resilix/Resources/Localizable.xcstrings`.
 **Automated audits (both green):**
-- `Tools/l10n/audit_keys.py` → 709 referenced keys, 0 missing from catalog, 0 untranslated, 0 placeholder-count mismatches, **0 orphan keys**.
+- `Tools/l10n/audit_keys.py` → 702 referenced keys, 0 missing from catalog, 0 untranslated, 0 placeholder-count mismatches, **0 orphan keys**.
 - `Tools/swiftcheck.py`, `Tools/sync_xcodeproj.py` → 114/114 files parse; project adds/removes 0 files.
 - `Tools/l10n/audit_uiliterals.py` → **0 problems**: no hard-coded English remains in any `Text`/`Label`/`Button`/`navigationTitle`/`NavigationLink`/`Section`/`TextField`/`Toggle`/`alert` title on a localised screen.
 
@@ -502,6 +524,6 @@ All 64 pass the offline syntax gate. **None has been run** — that requires Xco
 ## 14. Repository state
 
 - Branch `arena/2eab602c-resilix`, pushed to `origin`. `reslix_post_audit` commit contains the entire implementation, the tooling under `Tools/`, and the final localisation sweep (chunk19 + chunk20, raw-value label patch, String-ternary fixes).
-- Verification at time of writing (tree at the round-6 commit): `swiftcheck.py` 115/115 OK · `initcheck.py` 30 call sites, 0 mismatches · `enumcheck.py` 1178 qualified references + implicit enum arguments, 0 unknown · `semanticcheck.py` 0 non-throwing `try`, 0 `lock` in async · `memberresolve.py` 256 receiver calls, 0 unknown symbols · `awaitcheck.py` 0 `await` outside an async context · `capturecheck.py` 0 captured mutable vars in closures · `viewcheck.py` 0 dot-less modifiers, 0 weak captures in value types · `scopecheck.py` 320 types / 546 called identifiers, 0 unresolved · `audit_keys.py` 709/709 keys, 0 missing / 0 untranslated / 0 placeholder mismatches / 0 orphans · `audit_uiliterals.py` 0 problems · `sync_xcodeproj.py` adds 0 and removes 0 files.
+- Verification at time of writing (tree at the round-6 commit): `swiftcheck.py` 115/115 OK · `initcheck.py` 30 call sites, 0 mismatches · `enumcheck.py` 1178 qualified references + implicit enum arguments, 0 unknown · `semanticcheck.py` 0 non-throwing `try`, 0 `lock` in async · `memberresolve.py` 256 receiver calls, 0 unknown symbols · `awaitcheck.py` 0 `await` outside an async context · `capturecheck.py` 0 captured mutable vars in closures · `viewcheck.py` 0 dot-less modifiers, 0 weak captures in value types · `scopecheck.py` 320 types / 546 called identifiers, 0 unresolved · `audit_keys.py` 702/702 keys, 0 missing / 0 untranslated / 0 placeholder mismatches / 0 orphans · `audit_uiliterals.py` 0 problems · `sync_xcodeproj.py` adds 0 and removes 0 files.
 - Round 5 changed 20 Swift files plus this report, all of it inside `@ViewBuilder` bodies and one timer closure: 58 leading dots inserted, one stray `.onChange()` deleted, one capture list removed, and one new tool (`Tools/viewcheck.py`). No view hierarchy, layout, colour, font, spacing or animation was touched.
 - Download in Xcode: clone the branch and open `Resilix.xcodeproj`; the project carries **no SwiftPM dependencies**, so it resolves and builds with the stock iOS SDK. Signing is `CODE_SIGN_STYLE = Automatic` with no `DEVELOPMENT_TEAM`, so pick your own team in *Signing & Capabilities* before running on a device.

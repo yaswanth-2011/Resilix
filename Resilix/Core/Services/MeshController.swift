@@ -642,6 +642,12 @@ final class MeshController: ObservableObject {
         }
     }
 
+    /// Re-reads the transports' peer tables (used by pull-to-refresh).
+    func refreshNow() async {
+        await refreshPeers()
+        await processQueue()
+    }
+
     private func refreshPeers() async {
         var collected: [String: MeshNode] = [:]
         for transport in transports {

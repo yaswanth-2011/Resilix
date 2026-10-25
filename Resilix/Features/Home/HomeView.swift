@@ -12,9 +12,9 @@ struct HomeView: View {
     @State private var showSettings = false
     @State private var showLanguage = false
     @State private var searchText = ""
-    @State private var peers: [MeshNode] = []
     @AppStorage("language") private var language: SettingsView.Language = .english
-    @State private var meshConnected = true
+    /// True when at least one peer is really connected right now.
+    private var meshConnected: Bool { !app.meshController.connectedPeerIDs.isEmpty }
 
     var body: some View {
         NavigationStack {
@@ -63,11 +63,6 @@ struct HomeView: View {
 
             MeshStatusPill(connected: meshConnected)
                 .padding(.trailing, 4)
-                .onTapGesture {
-                    withAnimation(ResilixTheme.animationMedium) {
-                        meshConnected.toggle()
-                    }
-                }
 
             GlassCircleButton(systemImage: "globe", size: 32) { showLanguage = true }
                 .accessibilityLabel(Text(L("Language")))
@@ -172,23 +167,76 @@ struct HomeView: View {
     }
 
     private var conversations: [Conversation] {
-        // Demo mode: always show simulated people messaging on the mesh
+        // Demo mode: the simulated people of the demo controller.
         if app.demoController.isDemoMode { return Self.demoConversations }
-        let base = app.messageService.messages
-        return base.map { message in
+
+        // One row per conversation: the newest message of each thread. Listing
+        // every message made a single chat appear as many separate rows.
+        var newest: [String: MeshMessage] = [:]
+        for message in app.messageService.messages {
+            if let existing = newest[message.threadID] {
+                if message.createdAt > existing.createdAt { newest[message.threadID] = message }
+            } else {
+                newest[message.threadID] = message
+            }
+        }
+
+        var rows = newest.values.map { message in
             Conversation(
-                id: message.id,
-                name: message.threadID,
-                preview: message.text,
+                id: message.threadID,
+                name: threadTitle(for: message.threadID),
+                preview: message.previewText,
                 date: message.createdAt,
                 unread: 0,
-                online: message.deliveryState == .delivered,
+                online: app.meshController.isConnected(to: message.threadID),
                 mesh: meshBadge(for: message.lastRoute),
-                signal: message.deliveryState == .delivered ? 3 : 1,
+                signal: app.meshController.signalStrength(for: message.threadID).map { signalBar(for: $0) }
+                    ?? (message.deliveryState == .delivered ? 3 : 1),
                 avatarColor: AvatarView.color(for: message.threadID),
                 message: message
             )
         }
+
+        // Phones that are in range but have no history yet belong in the list
+        // too — that is the only way to start a chat with a device that was
+        // just discovered.
+        let known = Set(rows.map { $0.id })
+        for node in app.meshController.peers {
+            guard !known.contains(node.id) else { continue }
+            // A legacy thread keyed by the alias already owns the row.
+            guard newest[node.id] == nil, newest[node.alias] == nil else { continue }
+            let connected = app.meshController.isConnected(to: node.id)
+            rows.append(Conversation(
+                id: node.id,
+                name: node.displayName ?? node.alias,
+                preview: connected ? L("In range · Tap to start a message") : L("Discovered · Waiting for a link"),
+                date: node.lastSeen,
+                unread: 0,
+                online: connected,
+                mesh: connected ? .direct : .waiting,
+                signal: app.meshController.signalStrength(for: node.id).map { signalBar(for: $0) } ?? 0,
+                avatarColor: AvatarView.color(for: node.displayName ?? node.alias),
+                message: MeshMessage.threadSeed(for: node)
+            ))
+        }
+
+        return rows.sorted { $0.date > $1.date }
+    }
+
+    /// Name shown for a thread key. A thread key is the peer's node id, so the
+    /// live alias is preferred over the raw identifier.
+    private func threadTitle(for threadID: String) -> String {
+        if let node = app.meshController.peers.first(where: { $0.id == threadID }) {
+            return node.displayName ?? node.alias
+        }
+        let stored = app.messageService.messages.first { $0.threadID == threadID }
+        if let alias = stored?.senderAlias, !alias.isEmpty { return alias }
+        return threadID
+    }
+
+    /// Maps a 0–100 link quality onto the four signal bars of the row.
+    private func signalBar(for percent: Int) -> Int {
+        min(3, max(0, percent / 25))
     }
 
     private func meshBadge(for route: String?) -> MeshBadge? {
@@ -214,20 +262,9 @@ struct HomeView: View {
 
 
 
+    /// Pull-to-refresh: re-reads the peer tables of every transport.
     private func refreshPeers() async {
-        var all: [MeshNode] = []
-        for t in app.meshController.availableTransports { all.append(contentsOf: t.discoveredPeers) }
-        if app.demoController.isDemoMode && all.isEmpty {
-            all = [
-                MeshNode(id: "1", alias: "Alex", lastSeen: Date(), isRelay: false),
-                MeshNode(id: "2", alias: "Sam", lastSeen: Date(), isRelay: true),
-                MeshNode(id: "3", alias: "Jordan", lastSeen: Date(), isRelay: false),
-                MeshNode(id: "4", alias: "Maya", lastSeen: Date(), isRelay: true),
-                MeshNode(id: "5", alias: "Taylor", lastSeen: Date(), isRelay: false),
-                MeshNode(id: "6", alias: "Chris", lastSeen: Date(), isRelay: false),
-            ]
-        }
-        peers = all
+        await app.meshController.refreshNow()
     }
 
     // MARK: - Example conversations (Demo Mode — clearly simulated)

@@ -159,11 +159,34 @@ def function_ranges(source: str) -> list[tuple[int, int]]:
     return ranges
 
 
-# Text immediately before the closure's `{` (the brace itself is not included).
-ASYNC_CLOSURE = re.compile(
-    r"(?:=\s*|\bTask\s*(?:\([^)]*\))?\s*|\basync\s*|\bsink\s*|\bin\s*|"
-    r"\bwithChecked(?:Throwing)?Continuation\s*|\baddTask\s*(?:\([^)]*\))?\s*)$"
-)
+# Statements whose `{` opens a control-flow block, never a closure.
+CONTROL_STATEMENTS = {
+    "if", "else", "for", "while", "switch", "guard", "do", "catch", "repeat",
+    "defer", "case", "default", "func", "init", "deinit", "class", "struct",
+    "enum", "extension", "protocol", "actor", "subscript", "get", "set",
+    "willSet", "didSet", "#if", "#elseif", "#else", "#endif", "#available",
+}
+
+
+def is_closure_brace(source: str, pos: int) -> bool:
+    """True when the `{` at `pos` opens a closure rather than a block.
+
+    The statement that owns the brace decides it: `for … in x {` is a block,
+    `stateUpdateHandler = {` and `queue.async {` are closures. Assignments
+    (`let work = Task {`) are closures because the value is the closure.
+    """
+    cut = max(source.rfind("{", 0, pos), source.rfind("}", 0, pos),
+              source.rfind(";", 0, pos), source.rfind("\n", 0, pos))
+    statement = source[cut + 1:pos].strip()
+    word = re.match(r"([A-Za-z_#]\w*)", statement)
+    if word is None:
+        return False
+    head = word.group(1)
+    if head in CONTROL_STATEMENTS:
+        return False
+    if head in {"let", "var"}:
+        return "=" in statement
+    return True
 
 
 def check_file(path: Path, source: str) -> list[str]:
@@ -183,13 +206,20 @@ def check_file(path: Path, source: str) -> list[str]:
         for name in sorted(locals_):
             if name in seen:
                 continue
+            # Where the variable is declared. A closure only captures it when
+            # the closure opens *after* the declaration; a `var` declared inside
+            # the closure's own body is a local of that closure and is safe.
+            decl_match = re.search(rf"(?<![\w.])var\s+{re.escape(name)}\s*(?::|=)", body)
+            if decl_match is None:
+                continue
+            decl_pos = body_start + decl_match.start()
             mutation = re.compile(
                 rf"(?<![\w.]){re.escape(name)}\s*(?:\+=|-=|\*=|/=|=(?!=))"
             )
             for m in mutation.finditer(body, 1):
                 pos = body_start + m.start()
                 # `var resumed = false` is a declaration, not a mutation
-                if re.search(r"\bvar\s+$", source[max(0, pos - 40) : pos]):
+                if re.search(rf"\bvar\s+{re.escape(name)}\s*$", source[max(0, pos - 60) : pos]):
                     continue
                 # brace chain between the function body and the mutation
                 stack = [body_start]
@@ -207,8 +237,11 @@ def check_file(path: Path, source: str) -> list[str]:
                 # body; the innermost one is often just an `if`/`guard` block.
                 in_closure = False
                 for brace in stack[1:]:
-                    opener_context = source[max(0, brace - 60) : brace].rstrip()
-                    if ASYNC_CLOSURE.search(opener_context):
+                    # A closure that opened before the declaration encloses it,
+                    # it does not capture it.
+                    if brace < decl_pos:
+                        continue
+                    if is_closure_brace(source, brace):
                         in_closure = True
                         break
                 if not in_closure:

@@ -69,6 +69,27 @@ struct MeshMessage: Codable, Sendable, Equatable, Identifiable {
         self.replyToID = replyToID
     }
 
+    /// Placeholder that opens a thread for a peer without history.
+    ///
+    /// `MessageThreadView` renders the persisted messages only, so this seed is
+    /// never shown. It carries the peer's node id (the thread key, which also
+    /// addresses the replies) and its alias (used for the header title).
+    static func threadSeed(for node: MeshNode) -> MeshMessage {
+        MeshMessage(id: "seed-\(node.id)",
+                    packetID: nil,
+                    threadID: node.id,
+                    sourceNodeID: node.id,
+                    destinationNodeID: node.id,
+                    text: "",
+                    createdAt: Date(),
+                    deliveryState: .queued,
+                    expirySeconds: nil,
+                    lastRoute: nil,
+                    priority: .normal,
+                    senderAlias: node.displayName ?? node.alias,
+                    isOutgoing: true)
+    }
+
     // MARK: - Backwards compatible decoding
     private enum CodingKeys: String, CodingKey {
         case id, packetID, threadID, sourceNodeID, destinationNodeID, text

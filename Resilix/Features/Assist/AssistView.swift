@@ -3,55 +3,7 @@ import UIKit
 import Combine
 import Foundation
 
-// MARK: - Local AI Abstraction
-protocol ResilixLocalAI {
-    func respond(to query: String, knowledge: [FirstAidTopic]) async -> (text: String, source: String)
-}
-
-// Deterministic on-device engine — no network, no LLM download required for v1.
-// Uses keyword matching + knowledge base ranking. Replace with Core ML / MLX LLM
-// behind the same protocol later.
-struct OfflineAIEngine: ResilixLocalAI {
-    func respond(to query: String, knowledge: [FirstAidTopic]) async -> (text: String, source: String) {
-        try? await Task.sleep(nanoseconds: 600_000_000)
-        let q = query.lowercased()
-        if q.contains("burn") { return (format(topic: knowledge.first(where: { $0.id == "burn" })!), L("Local AI · Knowledge base")) }
-        if q.contains("bleed") { return (format(topic: knowledge.first(where: { $0.id == "bleeding" })!), L("Local AI · Knowledge base")) }
-        if q.contains("cpr") || q.contains("heart") || q.contains("unresponsive") { return (format(topic: knowledge.first(where: { $0.id == "cpr" })!), L("Local AI · Knowledge base")) }
-        if q.contains("chok") { return (format(topic: knowledge.first(where: { $0.id == "choking" })!), L("Local AI · Knowledge base")) }
-        if q.contains("fracture") || q.contains("break") || q.contains("bone") { return (format(topic: knowledge.first(where: { $0.id == "fracture" })!), L("Local AI · Knowledge base")) }
-        if q.contains("hypotherm") || q.contains("cold") || q.contains("freez") { return (format(topic: knowledge.first(where: { $0.id == "hypothermia" })!), L("Local AI · Knowledge base")) }
-        let scored = knowledge.map { topic -> (FirstAidTopic, Int) in
-            let text = (topic.id + " " + topic.title + " " + topic.category + " " + topic.steps.joined(separator: " ")).lowercased()
-            let score = q.split(separator: " ").filter { text.contains($0) }.count
-            return (topic, score)
-        }.sorted { $0.1 > $1.1 }
-        if let best = scored.first, best.1 > 0 {
-            return (format(topic: best.0), L("Knowledge base"))
-        }
-        return (
-            """
-            **\(L("General emergency guidance (offline):"))**
-            1. \(L("Ensure the area is safe for you and the injured person."))
-            2. \(L("Check responsiveness and breathing. Call for local help if anyone is nearby — Resilix mesh will relay if internet is down."))
-            3. \(L("Keep the person calm, warm, and still. Do not give food/drink if surgery may be needed."))
-            4. \(L("Describe what you see and I'll match it to the offline guides below."))
-
-            *\(L("Resilix Assist provides general information, not medical diagnosis. Seek professional help when available."))*
-            """,
-            L("Local AI · Generic")
-        )
-    }
-    private func format(topic: FirstAidTopic) -> String {
-        var s = "**\(topic.title)** — \(topic.category)\n\n"
-        for (i, step) in topic.steps.enumerated() { s += "\(i+1). \(step)\n" }
-        if let c = topic.caution { s += "\n⚠️ \(L("Caution:")) \(c)\n" }
-        s += "\n*\(L("When to seek help:"))* \(topic.whenToSeekHelp)\n\n*\(L("This guidance is from the offline knowledge base."))*"
-        return s
-    }
-}
-
-struct ChatMessage: Identifiable, Equatable {
+struct ChatMessage: Identifiable, Equatable, Sendable {
     let id = UUID()
     var role: Role
     var text: String
@@ -140,7 +92,6 @@ final class AssistViewModel: ObservableObject {
     /// The local model service of the app (set by the view).
     var aiService: LocalAIService?
     private var knowledge: [FirstAidTopic] { OfflineFirstAidStore.allTopics }
-    private let engine: ResilixLocalAI = OfflineAIEngine()
 
     init() {}
 
@@ -170,12 +121,23 @@ final class AssistViewModel: ObservableObject {
                let model = service.activeModel,
                model.id != LocalAIService.knowledgeBaseModeID {
                 await answerWithModel(service, prompt: trimmed)
-            } else {
-                // No language model selected: the bundled offline knowledge
-                // base answers (this is a local retrieval, not a model).
-                let result = await engine.respond(to: trimmed, knowledge: knowledge)
+            } else if let service = aiService {
+                // No language model selected: the curated offline knowledge
+                // base answers. This is the same retrieval the model manager
+                // describes, so there is exactly one source of medical text.
+                let text = service.knowledgeBaseAnswer(for: trimmed)
                 isTyping = false
-                messages.append(ChatMessage(role: .assistant, text: result.text, source: result.source))
+                messages.append(ChatMessage(role: .assistant,
+                                            text: text,
+                                            source: service.knowledgeBase.displayName))
+            } else {
+                // The service has not been attached yet: answer from the same
+                // curated topics rather than inventing a response.
+                let text = LocalAIService.knowledgeBaseAnswer(for: trimmed, topics: knowledge)
+                isTyping = false
+                messages.append(ChatMessage(role: .assistant,
+                                            text: text,
+                                            source: L("Offline knowledge base")))
             }
         }
     }
@@ -186,7 +148,9 @@ final class AssistViewModel: ObservableObject {
         var index: Int?
         do {
             for try await piece in service.ask(prompt: prompt) {
-                answer += piece
+                // `appending` keeps the text correct even when a runtime yields
+                // cumulative snapshots instead of deltas.
+                answer = LocalAIService.appending(answer, piece)
                 if let index {
                     messages[index].text = answer
                 } else {
@@ -223,7 +187,32 @@ final class AssistViewModel: ObservableObject {
 
     func regenerate() {
         guard let lastUser = messages.last(where: { $0.role == .user }) else { return }
-        send(lastUser.text)
+        // Drop the previous answer (and its bubble) before asking again, so the
+        // question is not appended to the transcript a second time.
+        if let lastAssistant = messages.last, lastAssistant.role == .assistant {
+            messages.removeLast()
+        }
+        isTyping = true
+        let prompt = lastUser.text
+        Task {
+            if let service = aiService,
+               let model = service.activeModel,
+               model.id != LocalAIService.knowledgeBaseModeID {
+                await answerWithModel(service, prompt: prompt)
+            } else if let service = aiService {
+                let text = service.knowledgeBaseAnswer(for: prompt)
+                isTyping = false
+                messages.append(ChatMessage(role: .assistant,
+                                            text: text,
+                                            source: service.knowledgeBase.displayName))
+            } else {
+                let text = LocalAIService.knowledgeBaseAnswer(for: prompt, topics: knowledge)
+                isTyping = false
+                messages.append(ChatMessage(role: .assistant,
+                                            text: text,
+                                            source: L("Offline knowledge base")))
+            }
+        }
     }
 }
 
@@ -288,6 +277,7 @@ struct AssistView: View {
     @State private var showClearConfirm = false
     @State private var showSettings = false
     @State private var showModelManager = false
+    @State private var showVoiceNotice = false
     @FocusState private var focused: Bool
 
     var body: some View {
@@ -373,19 +363,19 @@ struct AssistView: View {
                 Button(L("Cancel"), role: .cancel) {}
                 Button(L("Clear"), role: .destructive) { vm.clear() }
             }
+            .alert(L("Voice input"), isPresented: $showVoiceNotice) {
+                Button(L("OK"), role: .cancel) {}
+            } message: {
+                Text(L("The assistant answers offline, but speech recognition for the prompt needs the system keyboard dictation. Tap the microphone key on the keyboard to dictate instead."))
+            }
         }
     }
 
-    // MARK: - Header (logo + title + pill + actions)
+    // MARK: - Header (title + pill + actions)
     private var aiHeader: some View {
         HStack(alignment: .center, spacing: 12) {
-            // Use the dark placeholder logo asset
-            Image("ResilixLogoPlaceholderDark")
-                .resizable()
-                .scaledToFit()
-                .frame(height: 36)
-                .shadow(color: ResilixTheme.cyanGlowStrong, radius: 4)
-
+            // No logo here: it pushed the title against the action buttons and
+            // truncated the engine name. The wordmark stays on the other tabs.
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 8) {
                     // Bigger and less bold
@@ -415,6 +405,8 @@ struct AssistView: View {
                         .font(ResilixTheme.font(12, .medium))
                         .foregroundStyle(ResilixTheme.textSecondary)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                        .allowsTightening(true)
                 }
             }
             Spacer()
@@ -546,7 +538,10 @@ struct AssistView: View {
             .liquidGlassRounded(cornerRadius: ResilixTheme.cornerRadiusLarge, interactive: true)
 
             Button {
-                // Mic placeholder
+                // The assistant has no offline speech-to-text model on the
+                // device, so this explains what the button can and cannot do
+                // instead of pretending to listen.
+                showVoiceNotice = true
             } label: {
                 Image(systemName: "mic.fill")
                     .font(.system(size: 15, weight: .semibold))

@@ -6697,77 +6697,6 @@
         }
       }
     },
-    "Check responsiveness and breathing. Call for local help if anyone is nearby — Resilix mesh will relay if internet is down.": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "সাড়া ও শ্বাস দেখুন। কাছে কেউ থাকলে স্থানীয় সাহায্য চান — ইন্টারনেট না থাকলে Resilix মেস রিলে করবে।"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Check responsiveness and breathing. Call for local help if anyone is nearby — Resilix mesh will relay if internet is down."
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "પ્રતિક્રિયા અને શ્વાસ જુઓ. નજીકમાં કોઈ હોય તો સ્થાનિક મદદ માંગો — ઇન્ટરનેટ બંધ હોય તો Resilix મેશ રિલે કરશે."
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "प्रतिक्रिया और साँस देखें। यदि कोई पास हो तो स्थानीय सहायता बुलाएँ — इंटरनेट बंद हो तो Resilix मेश रिले करेगा।"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ಪ್ರತಿಕ್ರಿಯೆ ಮತ್ತು ಉಸಿರುವಿಕೆ ಪರಿಶೀಲಿಸಿ. ಯಾರಾದರೂ ಸಮೀಪದಲ್ಲಿ ಇದ್ದರೆ ಸ್ಥಳೀಯ ಸಹಾಯ ಕರಿ — ಇಂಟರ್ನೆಟ್ ಇಲ್ಲದಿದ್ದರೆ Resilix ಮೆಶ್ ರಿಲೇ ಮಾಡುತ್ತದೆ."
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "പ്രതികരണവും ശ്വാസവും പരിശോധിക്കുക. ആരെങ്കിലും അടുത്തുണ്ടെങ്കിൽ സ്ഥലീയ സഹായം വിളിക്കുക — ഇന്റർനെറ്റ് ഇല്ലെങ്കിൽ Resilix മെഷ് റിലേ ചെയ്യും."
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "प्रतिक्रिया और साँस देखें। यदि कोई पास हो तो स्थानीय सहायता बुलाएँ — इंटरनेट बंद हो तो Resilix मेश रिले करेगा।"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "جوابداری اور سانس چیک کریں۔ اگر کوئی قریب ہو تو مقامی مدد مانگیں — انٹرنیٹ بند ہو تو Resilix میش ریلے کرے گا۔"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "மறுமொழிவையும் சுவாசத்தையும் சரிபார்க்கவும். யாரும் அருகில் இருந்தால் உதவியை அழைக்கவும் — இண்டர்நெட் இல்லாவிட்டால் Resilix மெஷ் ரிலே செய்யும்."
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ప్రతిస్పందన మరియు శ్వాసను పరిశీలించండి. ఎవరైనా దగ్గర ఉంటే స్థానిక సహాయం అనుమోదించండి — ఇంటర్నెట్ లేకపోతే Resilix మెష్ రిలే చేస్తుంది."
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਜਦੋਂ ਤੱਕ ਵਸਤੂ ਨਿਕਲ ਨਾ ਜਾਵੇ, ਪਿੱਠ 'ਤੇ ਥਪਕੋ ਅਤੇ ਪੇਟ 'ਤੇ ਥਪਕੋ ਬਾਰੀ-ਬਾਰੀ।"
-          }
-        }
-      }
-    },
     "Check responsiveness: tap shoulders and shout.": {
       "extractionState": "manual",
       "localizations": {
@@ -10967,77 +10896,6 @@
         }
       }
     },
-    "Describe what you see and I'll match it to the offline guides below.": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "আপনি যা দেখছেন তা বর্ণনা করুন, আমি নিচের অফলাইন গাইডের সাথে মিলিয়ে দেব।"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Describe what you see and I'll match it to the offline guides below."
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "તમે શું જોઈ રહ્યા છો તેનું વર્ણન કરો, હું તેને નીચેના ઑફલાઇન માર્ગદર્શિકા સાથે મેળવાવીશ."
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "जो देख रहे हैं उसका वर्णन करें, मैं इसे नीचे दिए ऑफ़लाइन गाइड से मिलाऊँगा।"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ನೀವು ಏನು ನೋಡುತ್ತಿದ್ದೀರಿ ಎಂದು ವರ್ಣಿಸಿ, ನಾನು ಅದನ್ನು ಕೆಳಗಿನ ಆಫ್‌ಲೈನ್ ಮಾರ್ಗದರ್ಶಿಕೆಗಳಿಗೆ ಹೊಂದಿಸುತ್ತೇನೆ."
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "നിങ്ങൾ കാണുന്നത് വിവരിക്കുക, ഞാൻ താഴെയുള്ള ഓഫ്‌ലൈൻ ഗൈഡുകളുമായി അതിനെ പൊരുത്തിക്കും."
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "जो देख रहे हैं उसका वर्णन करें, मैं इसे नीचे दिए ऑफ़लाइन गाइड से मिलाऊँगा।"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "جو کچھ دیکھ رہے ہیں اس کی تفصیل بتائیں، میں اسے نیچے دیے گئے آف لائن گائیڈ سے جوڑ دوں گا۔"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "நீங்கள் காண்பதை விவரிக்கவும், அதை கீழே உள்ள அப்‌ஃலைன் வழிகாட்டுகளுடன் பொருத்துகிறேன்."
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "మీరు ఏమి చూస్తున్నారో వర్ణించండి, నేను దీన్ని కింద ఉన్న ఆఫ్‌లైన్ గైడ్‌లకు సరిపోలుస్తాను."
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਜਦੋਂ ਤੱਕ ਵਸਤੂ ਨਿਕਲ ਨਾ ਜਾਵੇ, ਪਿੱਠ 'ਤੇ ਥਪਕੋ ਅਤੇ ਪੇਟ 'ਤੇ ਥਪਕੋ ਬਾਰੀ-ਬਾਰੀ।"
-          }
-        }
-      }
-    },
     "Destination": {
       "comment": "A label for the destination of a route.",
       "extractionState": "manual",
@@ -11608,6 +11466,77 @@
           "stringUnit": {
             "state": "translated",
             "value": "نئے میش پیئرز تلاش کریں"
+          }
+        }
+      }
+    },
+    "Discovered · Waiting for a link": {
+      "extractionState": "manual",
+      "localizations": {
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সনাক্ত হয়েছে · লিঙ্কের অপেক্ষায়"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discovered · Waiting for a link"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "શોધાયું · લિંકની રાહમાં"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "खोजा गया · लिंक की प्रतीक्षा"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಪತ್ತೆಯಾಗಿದೆ · ಲಿಂಕ್‌ಗಾಗಿ ಕಾಯುತ್ತಿದೆ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "കണ്ടെത്തി · ലിങ്കിനായി കാത്തിരിക്കുന്നു"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सापडले · लिंकची प्रतीक्षा"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਲੱਭਿਆ · ਲਿੰਕ ਦੀ ਉਡੀਕ"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "கண்டறியப்பட்டது · இணைப்பிற்காக காத்திருக்கிறது"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "కనుగొనబడింది · లింక్ కోసం వేచి ఉంది"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دریافت ہوا · لنک کا انتظار"
           }
         }
       }
@@ -12890,77 +12819,6 @@
         }
       }
     },
-    "Ensure the area is safe for you and the injured person.": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "নিশ্চিত করুন যে এলাকাটি আপনার ও আহত ব্যক্তির জন্য নিরাপদ।"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ensure the area is safe for you and the injured person."
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ખાતરી કરો કે આ વિસ્તાર તમારા અને ઘાયલ વ્યક્તિ માટે સુરક્ષિત છે."
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "यह सुनिश्चित करें कि यह क्षेत्र आपके और घायल व्यक्ति के लिए सुरक्षित है।"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ನೀವು ಮತ್ತು ಗಾಯಿತರಿಗೆ ಆ ಪ್ರದೇಶ ಸುರಕ್ಷಿತವಾಗಿದೆ ಎಂದು ಖಚಿತಪಡಿಸಿ."
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "നിങ്ങളും പരികലപ്പെടുന്നവരും സുരക്ഷിതരാണെന്ന് ഉറപ്പാക്കുക."
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "यह सुनिश्चित करें कि यह क्षेत्र आपके और घायल व्यक्ति के लिए सुरक्षित है।"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਯਕੀਨੀ ਬਣਾਓ ਕਿ ਇਹ ਖੇਤਰ ਤੁਹਾਡੇ ਅਤੇ ਜ਼ਖਮੀ ਵਿਅਕਤੀ ਲਈ ਸੁਰੱਖਿਅਤ ਹੈ۔"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "நீங்களும் பாதிக்கப்பட்டவரும் பாதுகாப்பாக இருப்பதை உறுதிசெய்யுங்கள்."
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "మీరు మరియు దిగాయమైన వ్యక్తికి ఆ ప్రాంతం సురక్షితమైనదో నిర్ధారించండి."
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਜਦੋਂ ਤੱਕ ਵਸਤੂ ਨਿਕਲ ਨਾ ਜਾਵੇ, ਪਿੱਠ 'ਤੇ ਥਪਕੋ ਅਤੇ ਪੇਟ 'ਤੇ ਥਪਕੋ ਬਾਰੀ-ਬਾਰੀ।"
-          }
-        }
-      }
-    },
     "Enter email and password.": {
       "extractionState": "manual",
       "localizations": {
@@ -14239,77 +14097,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "GPS فعال"
-          }
-        }
-      }
-    },
-    "General emergency guidance (offline):": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "সাধারণ জরুরি নির্দেশনা (অফলাইন):"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "General emergency guidance (offline):"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "સામાન્ય કટોકટી માર્ગદર્શન (ઑફલાઇન):"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "सामान्य आपातकालीन मार्गदर्शन (ऑफ़लाइन):"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ಸಾಮಾನ್ಯ ತುರ್ಜರು ಮಾರ್ಗದರ್ಶನ (ಆಫ್‌ಲೈನ್):"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "പൊതു അടിയാപ്പരായ മാർഗനിർദേശം (ഓഫ്‌ലൈൻ):"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "सामान्य आपातकालीन मार्गदर्शन (ऑफ़लाइन):"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਆਮ ਐਮਰਜੈਂਸੀ ਮਾਰਗਦਰਸ਼ਨ (ਔਫਲਾਈਨ):"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "பொதுவான அவசர வழிகாட்டல் (ஆஃப்லைன்):"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "సాధారణ అత్యవసర సూచనలు (ఆఫ్‌లైన్):"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "عمومی ہنگامی رہنمائی (آف لائن):"
           }
         }
       }
@@ -15951,6 +15738,77 @@
         }
       }
     },
+    "In range · Tap to start a message": {
+      "extractionState": "manual",
+      "localizations": {
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "পরিসরে · বার্তা শুরু করতে ট্যাপ করুন"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In range · Tap to start a message"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "શ્રેણીમાં · સંદેશ શરૂ કરવા ટૅપ કરો"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रेंज में · संदेश शुरू करने के लिए टैप करें"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಶ್ರೇಣಿಯಲ್ಲಿದೆ · ಸಂದೇಶ ಪ್ರಾರಂಭಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "പരിധിയിൽ · സന്ദേശം ആരംഭിക്കാൻ ടാപ്പ് ചെയ്യുക"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "श्रेणीत · संदेश सुरू करण्यासाठी टॅप करा"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰੇਂਜ ਵਿੱਚ · ਸੁਨੇਹਾ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "வரம்பிற்குள் · செய்தியைத் தொடங்க தட்டவும்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "పరిధిలో ఉంది · సందేశం ప్రారంభించడానికి నొక్కండి"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حد میں · پیغام شروع کرنے کے لیے ٹیپ کریں"
+          }
+        }
+      }
+    },
     "Incident": {
       "extractionState": "manual",
       "localizations": {
@@ -16519,148 +16377,6 @@
         }
       }
     },
-    "Keep the person calm, warm, and still. Do not give food/drink if surgery may be needed.": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ব্যক্তিকে শান্ত, উষ্ণ ও স্থির রাখুন। অস্ত্রোপচার লাগলে খাবার/পানি দেবেন না।"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keep the person calm, warm, and still. Do not give food/drink if surgery may be needed."
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "વ્યક્તિને શાંત, ગરમ અને સ્થિર રાખો. શસ્ત્રક્રિયા જરૂર હોય તો ખાવાનું-પીવાનું ન આપો."
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "व्यक्ति को शांत, गर्म और स्थिर रखें। यदि शल्य चाहिए तो खाना-पीना न दें।"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ವ್ಯಕ್ತಿಯನ್ನು ಶಾಂತವಾಗಿ, ಬೆಚ್ಚಗಿನ, ಸ್ಥಿರವಾಗಿ ಇರಿಸಿ. ಶಸ್ತ್ರಚಿಕಿತ್ಸೆ ಬೇಕಾದರೆ ಆಹಾರ/ನೀರು ಕೊಡಬೇಡಿ."
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ആളെ ശാന്തനായി, ചൂടുള്ളതായി, നിശ്ശബ്ദമായി വയ്ക്കുക. ശസ്ത്രചികിത്സ വേണ്ടിഉള്ളാൽ ഭക്ഷണം/വെള്ളി നൽകരുത്."
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "व्यक्ति को शांत, गर्म और स्थिर रखें। यदि शल्य चाहिए तो खाना-पीना न दें।"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "شخص کو پرسکون، گرم اور ساکن رکھیں۔ اگر آپریشن کی ضرورت ہو تو کھانا-پینا نہ دیں۔"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ஆளை அமைதியாக, வெப்பமாக, அசையாமல் வைத்திருங்கள். அறுவை தேவைப்பட்டால் உணவு/தண்ணீர் கொடுக்காதீர்கள்."
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "వ్యక్తిని ప్రశాంతంగా, వేడిగా, స్థిరంగా ఉంచండి. శస్త్రకియ్య అవసరమైతే ఆహారం/పానీ ఇవ్వవద్దు."
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਜਦੋਂ ਤੱਕ ਵਸਤੂ ਨਿਕਲ ਨਾ ਜਾਵੇ, ਪਿੱਠ 'ਤੇ ਥਪਕੋ ਅਤੇ ਪੇਟ 'ਤੇ ਥਪਕੋ ਬਾਰੀ-ਬਾਰੀ।"
-          }
-        }
-      }
-    },
-    "Knowledge base": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "জ্ঞানভান্ডার"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Knowledge base"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "જ્ઞાનભંડોળ"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ज्ञान आधार"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ಜ್ಞಾನಕೋಶ"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ജ്ഞാനസമൂഹം"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ज्ञानसंच"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਗਿਆਨ-ਅਧਾਰ"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "அறிவுத்தளம்"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "జ్ఞానబేసం"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "معلوماتی ذخیرہ"
-          }
-        }
-      }
-    },
     "LOCAL": {
       "comment": "A label that indicates that the AI is running locally.",
       "extractionState": "manual",
@@ -17158,148 +16874,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "لوڈ ہو رہا ہے…"
-          }
-        }
-      }
-    },
-    "Local AI · Generic": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "স্থানীয় AI · সাধারণ"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Local AI · Generic"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "સ્થાનિક AI · સામાન્ય"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "स्थानीय AI · सामान्य"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ಸ್ಥಳೀಯ AI · ಸಾಮಾನ್ಯ"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ലോക്കൽ AI · പൊതുവായത്"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "स्थानिक AI · सामान्य"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਸਥਿਆਈ AI · ਆਮ"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "உள்ளூர் AI · பொதுவான"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "స్థానిక AI · సాధారణ"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "مقامی AI · عمومی"
-          }
-        }
-      }
-    },
-    "Local AI · Knowledge base": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "স্থানীয় AI · জ্ঞানভান্ডার"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Local AI · Knowledge base"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "સ્થાનિક AI · જ્ઞાનભંડોળ"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "स्थानीय AI · ज्ञान आधार"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ಸ್ಥಳೀಯ AI · ಜ್ಞಾನಕೋಶ"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ലോക്കൽ AI · ജ്ഞാനസമൂഹം"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "स्थानिक AI · ज्ञानसंच"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਸਥਿਆਈ AI · ਗਿਆਨ-ਅਧਾਰ"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "உள்ளூர் AI · அறிவுத்தளம்"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "స్థానిక AI · జ్ఞానబేసం"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "مقامی AI · معلوماتی ذخیرہ"
           }
         }
       }
@@ -23651,6 +23225,77 @@
         }
       }
     },
+    "Offline knowledge base": {
+      "extractionState": "manual",
+      "localizations": {
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "অফলাইন জ্ঞানভিত্তি"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offline knowledge base"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ઑફલાઇન જ્ઞાન આધાર"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ऑफ़लाइन ज्ञान आधार"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಆಫ್‌ಲೈನ್ ಜ್ಞಾನ ಆಧಾರ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഓഫ്‌ലൈൻ വിജ്ഞാന അടിത്തറ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ऑफलाइन ज्ञानकोश"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਆਫ਼ਲਾਈਨ ਗਿਆਨ ਅਧਾਰ"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ஆஃப்லைன் அறிவுத் தளம்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఆఫ్‌లైన్ నాలెడ్జ్ బేస్"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آف لائن علم کی بنیاد"
+          }
+        }
+      }
+    },
     "Offline knowledge base selected.": {
       "extractionState": "manual",
       "localizations": {
@@ -28276,77 +27921,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "ریزیلکس اسسٹ 1.0"
-          }
-        }
-      }
-    },
-    "Resilix Assist provides general information, not medical diagnosis. Seek professional help when available.": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resilix Assist সাধারণ তথ্য দেয়, চিকিৎসা নির্ণয় নয়। সুবিধা থাকলে পেশাদার সাহায্য নিন।"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resilix Assist provides general information, not medical diagnosis. Seek professional help when available."
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resilix Assist સામાન્ય માહિતી આપે છે, તબીબી નિદાન નહીં. ઉપલબ્ધ હોય તો વૃત્તિમાત્ર સહાય લો."
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resilix Assist सामान्य जानकारी देता है, चिकित्सा निदान नहीं। उपलब्ध होने पर पेशेवर सहायता लें।"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resilix Assist ಸಾಮಾನ್ಯ ಮಾಹಿತಿ ನೀಡುತ್ತದೆ, ವೈದ್ಯ ರೋಗನಿರ್ಣಯ ಅಲ್ಲ. ಲಭ್ಯವಿದ್ದರೆ ವೈದ್യ ಸಹಾಯ ಪಡೆಯಿರಿ."
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resilix Assist പൊതു വിവരങ്ങൾ നൽകുന്നു, മെഡിക്കൽ ഡയഗ്നോസിസ് അല്ല. ലഭ്യമെങ്കിൽ ഡോക്ടർ സഹായം തേടുക."
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resilix Assist सामान्य जानकारी देता है, चिकित्सा निदान नहीं। उपलब्ध होने पर पेशेवर सहायता लें।"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resilix Assist عمومی معلومات فراہم کرتا ہے، طبی تشخیص نہیں۔ دستیاب ہو تو ماہر مدد لیں۔"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resilix Assist பொதுவான தகவல்களை வழங்குகிறது, மருத்துவ நோய்க் கண்டறிதலை அல்ல. விருப்பம் இருந்தால் மருத்துவ உதவியை அழைக்கவும்."
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resilix Assist సాధారణ సమాచారాన్ని అందిస్తుంది, వైద్య నిర్ణయాన్ని కాదు. అందుబాటులో ఉంటే వైద్య సహాయం తీసుకోండి."
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਜਦੋਂ ਤੱਕ ਵਸਤੂ ਨਿਕਲ ਨਾ ਜਾਵੇ, ਪਿੱਠ 'ਤੇ ਥਪਕੋ ਅਤੇ ਪੇਟ 'ਤੇ ਥਪਕੋ ਬਾਰੀ-ਬਾਰੀ।"
           }
         }
       }
@@ -33990,6 +33564,77 @@
         }
       }
     },
+    "The assistant answers offline, but speech recognition for the prompt needs the system keyboard dictation. Tap the microphone key on the keyboard to dictate instead.": {
+      "extractionState": "manual",
+      "localizations": {
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সহায়ক অফলাইনে উত্তর দেয়, তবে প্রশ্নের জন্য বাক্‌ স্বীকৃতির জন্য সিস্টেম কীবোর্ড ডিক্টেশন প্রয়োজন। পরিবর্তে কীবোর্ডের মাইক্রোফোন কী ট্যাপ করুন।"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The assistant answers offline, but speech recognition for the prompt needs the system keyboard dictation. Tap the microphone key on the keyboard to dictate instead."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સહાયક ઑફલાઇન જવાબ આપે છે, પરંતુ પ્રશ્ન માટે ભાષણ ઓળખ માટે સિસ્ટમ કીબોર્ડ ડિક્ટેશન જરૂરી છે. તેના બદલે કીબોર્ડ પરની માઇક્રોફોન કી ટૅપ કરો."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सहायक ऑफ़लाइन उत्तर देता है, लेकिन प्रश्न के लिए वाक् पहचान हेतु सिस्टम कीबोर्ड डिक्टेशन आवश्यक है। इसके बजाय कीबोर्ड पर माइक्रोफ़ोन कुंजी टैप करें।"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಸಹಾಯಕ ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ಉತ್ತರಿಸುತ್ತದೆ, ಆದರೆ ಪ್ರಶ್ನೆಗೆ ಮಾತು ಗುರುತಿಸುವಿಕೆಗೆ ಸಿಸ್ಟಮ್ ಕೀಬೋರ್ಡ್ ಡಿಕ್ಟೇಶನ್ ಬೇಕು. ಬದಲಾಗಿ ಕೀಬೋರ್ಡ್‌ನ ಮೈಕ್ರೊಫೋನ್ ಕೀಲಿಯನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "അസിസ്റ്റന്റ് ഓഫ്‌ലൈനായി ഉത്തരം നൽകുന്നു, എന്നാൽ ചോദ്യത്തിനുള്ള സംഭാഷണ തിരിച്ചറിയലിന് സിസ്റ്റം കീബോർഡ് ഡിക്റ്റേഷൻ ആവശ്യമാണ്. പകരം കീബോർഡിലെ മൈക്രോഫോൺ കീ ടാപ്പ് ചെയ്യുക."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सहाय्यक ऑफलाइन उत्तर देतो, परंतु प्रश्नासाठी भाषण ओळखण्यासाठी सिस्टम कीबोर्ड डिक्टेशन आवश्यक आहे. त्याऐवजी कीबोर्डवरील माइक्रोफोन की टॅप करा."
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸਹਾਇਕ ਆਫ਼ਲਾਈਨ ਜਵਾਬ ਦਿੰਦਾ ਹੈ, ਪਰ ਸਵਾਲ ਲਈ ਬੋਲੀ ਪਛਾਣ ਲਈ ਸਿਸਟਮ ਕੀਬੋਰਡ ਡਿਕਟੇਸ਼ਨ ਲੋੜੀਂਦੀ ਹੈ। ਇਸ ਦੀ ਥਾਂ ਕੀਬੋਰਡ ਉੱਤੇ ਮਾਈਕ੍ਰੋਫ਼ੋਨ ਕੀ ਟੈਪ ਕਰੋ।"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உதவியாளர் ஆஃப்லைனில் பதிலளிக்கிறது, ஆனால் கேள்விக்கான பேச்சு அறிதல் அமைப்பு விசைப்பலகை கட்டளை எழுத்தைச் சார்ந்தது. அதற்குப் பதிலாக விசைப்பலகையில் உள்ள ஒலிவாங்கி விசையைத் தட்டவும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సహాయకుడు ఆఫ్‌లైన్‌లో సమాధానం ఇస్తుంది, కానీ ప్రశ్న కోసం వాక్ గుర్తింపు కోసం సిస్టమ్ కీబోర్డ్ డిక్టేషన్ అవసరం. బదులుగా కీబోర్డ్‌లోని మైక్రోఫోన్ కీని నొక్కండి."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "معاون آف لائن جواب دیتا ہے، لیکن سوال کے لیے تقریر کی شناخت کے لیے سسٹم کی بورڈ ڈکٹیشن درکار ہے۔ اس کے بجائے کی بورڈ پر مائیکروفون کلید دبائیں۔"
+          }
+        }
+      }
+    },
     "The bundled first-aid topics cover:": {
       "extractionState": "manual",
       "localizations": {
@@ -35761,77 +35406,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "وائس پیغام نہیں چلایا جا سکا۔"
-          }
-        }
-      }
-    },
-    "This guidance is from the offline knowledge base.": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "এই নির্দেশনা অফলাইন জ্ঞানভাণ্ডার থেকে এসেছে।"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This guidance is from the offline knowledge base."
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "આ માર્ગદર્શન ઑફલાઇન જ્ઞાન આધારથી છે."
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "यह मार्गदर्शन ऑफ़लाइन ज्ञान आधार से है।"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ಈ ಮಾರ್ಗದರ್ಶನವು ಆಫ್‌ಲೈನ್ ಜ್ಞಾನಕೋಶದಿಂದ ಬಂದಿದೆ."
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ഈ മാർഗനിർദേശം ഓഫ്‌ലൈൻ വിജ്ഞാന അറിവിൽ നിന്നാണ്."
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "यह मार्गदर्शन ऑफ़लाइन ज्ञान आधार से है।"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਇਹ ਮਾਰਗਦਰਸ਼ਨ ਔਫਲਾਈਨ ਗਿਆਨ ਬੇਸ ਤੋਂ ਹੈ."
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "இந்த வழிகாட்டல் அப்‌ஃலைன் அறிவுத் தளத்திலிருந்து வந்தது."
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ఈ సూచనలు ఆఫ్‌లైన్ జ్ఞానభాండారం నుండి ఉన్నాయి."
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "یہ رہنمائی آف لائن معلوماتی ذخیرے سے ہے۔"
           }
         }
       }
@@ -38256,77 +37830,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "اب کیا کریں"
-          }
-        }
-      }
-    },
-    "When to seek help:": {
-      "extractionState": "manual",
-      "localizations": {
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "কখন সাহায্য নেবেন:"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "When to seek help:"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "મદદ ક્યારે માંગશો:"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "सहायता कब लें:"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ಸಹಾಯ ಯಾವಾಗ ಬೇಕು:"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "സഹായം എന്തുവേണ്ടും ആവശ്യമാണ്:"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "सहायता कब लें:"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਮਦਦ ਕਦੋਂ ਲੈਣੀ ਹੈ:"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "உதவி எப்போது தேவை:"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "సహాయం ఎప్పుడు అవసరం:"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "مدد کب لیں؟"
           }
         }
       }

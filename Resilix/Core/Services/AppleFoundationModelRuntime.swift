@@ -111,9 +111,26 @@ final class AppleFoundationModelRuntime: LocalModelRuntime {
                 }
                 let work = Task {
                     do {
+                        // `streamResponse` yields a *cumulative* snapshot: every
+                        // element already contains everything generated so far.
+                        // The consumer appends what it receives, so the snapshot
+                        // has to be turned into a delta here. Without this the
+                        // answer grew as "H", "He", "Hey", ... and every bubble
+                        // read as the same text over and over.
+                        var emitted = ""
                         for try await response in session.streamResponse(to: request.prompt) {
                             if Task.isCancelled { break }
-                            continuation.yield(response.content)
+                            let snapshot = response.content
+                            let delta: String
+                            if snapshot.hasPrefix(emitted) {
+                                delta = String(snapshot.dropFirst(emitted.count))
+                            } else {
+                                // The model rewrote an earlier part of the text:
+                                // send what changed instead of dropping it.
+                                delta = snapshot
+                            }
+                            emitted = snapshot
+                            if !delta.isEmpty { continuation.yield(delta) }
                         }
                         continuation.finish()
                     } catch {

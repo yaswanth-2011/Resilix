@@ -118,12 +118,11 @@ struct SurvivalMapView: View {
     }
     @State private var searchText: String = ""
     @FocusState private var searchFocused: Bool
-    @State private var cameraPosition: MapCameraPosition = .region(
-        MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 37.3349, longitude: -122.0090),
-            span: MKCoordinateSpan(latitudeDelta: 0.008, longitudeDelta: 0.008)
-        )
-    )
+    /// Starts on the device's own position. `.userLocation` asks the system to
+    /// follow the real fix; the automatic fallback only applies until the first
+    /// GPS (or Wi-Fi/cell) location arrives, so the map never opens on a city
+    /// the user is not in.
+    @State private var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
 
     // Live 2-finger gesture state (drag adjusts pitch, pinch adjusts distance)
     @GestureState private var gesturePitchDelta: Double = 0
@@ -131,15 +130,14 @@ struct SurvivalMapView: View {
     /// `true` once the camera has been centred on the device's own position.
     @State private var didCenterOnUser = false
 
-    /// Centre used before the first GPS fix (and on the simulator, which has none).
-    private static let fallbackCoordinate = CLLocationCoordinate2D(latitude: 37.3349, longitude: -122.0090)
-
-    /// The device's real position. Falls back to `fallbackCoordinate` only
-    /// until the first fix arrives, so a marker is never placed at a made-up
-    /// location once the phone knows where it is.
-    private var userCoordinate: CLLocationCoordinate2D {
-        app.locationService.coordinate ?? Self.fallbackCoordinate
+    /// The device's real position, `nil` until the system delivers a fix.
+    ///
+    /// Nothing is drawn at an invented place: without a fix there is no "You"
+    /// marker and no distance line, and the status line says so.
+    private var userCoordinate: CLLocationCoordinate2D? {
+        app.locationService.coordinate
     }
+
 
     enum MapFilter: String, CaseIterable, Identifiable {
         case all = "All"
@@ -174,35 +172,41 @@ struct SurvivalMapView: View {
                 // (just below the status bar) and the slider sits at a
                 // consistent position above the tab bar.
                 Map(position: $cameraPosition, interactionModes: [.pan, .zoom, .rotate, .pitch]) {
-                    Annotation("You", coordinate: userCoordinate, anchor: .bottom) {
-                        YouMapAnnotation()
+                    if let userCoordinate {
+                        Annotation("You", coordinate: userCoordinate, anchor: .bottom) {
+                            YouMapAnnotation()
+                        }
                     }
 
-                    // Halo polylines — soft white underlay so the line pops
-                    // off any map style (satellite, standard, hybrid…).
-                    ForEach(visiblePeers) { peer in
-                        MapPolyline(coordinates: [userCoordinate, peer.coordinate])
-                            .stroke(
-                                Color.white.opacity(0.45),
-                                style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round)
-                            )
-                    }
-
-                    // Core polylines — bold colored marching dashes flowing
-                    // from "You" out to each peer.
-                    ForEach(visiblePeers) { peer in
-                        MapPolyline(coordinates: [userCoordinate, peer.coordinate])
-                            .stroke(
-                                color(for: peer.kind),
-                                style: StrokeStyle(
-                                    lineWidth: 3.5,
-                                    lineCap: .round,
-                                    lineJoin: .round,
-                                    miterLimit: 0,
-                                    dash: [6, 4],
-                                    dashPhase: dashPhase
+                    // Routes are only drawn from a real fix: a line from a
+                    // made-up position would be a lie about the distance.
+                    if let userCoordinate {
+                        // Halo polylines — soft white underlay so the line pops
+                        // off any map style (satellite, standard, hybrid…).
+                        ForEach(visiblePeers) { peer in
+                            MapPolyline(coordinates: [userCoordinate, peer.coordinate])
+                                .stroke(
+                                    Color.white.opacity(0.45),
+                                    style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round)
                                 )
-                            )
+                        }
+
+                        // Core polylines — bold colored marching dashes flowing
+                        // from "You" out to each peer.
+                        ForEach(visiblePeers) { peer in
+                            MapPolyline(coordinates: [userCoordinate, peer.coordinate])
+                                .stroke(
+                                    color(for: peer.kind),
+                                    style: StrokeStyle(
+                                        lineWidth: 3.5,
+                                        lineCap: .round,
+                                        lineJoin: .round,
+                                        miterLimit: 0,
+                                        dash: [6, 4],
+                                        dashPhase: dashPhase
+                                    )
+                                )
+                        }
                     }
 
                     ForEach(visiblePeers) { peer in
@@ -642,7 +646,9 @@ struct SurvivalMapView: View {
 
     /// Apply the camera based on the current style + 3D pitch + 3D mode.
     private func apply3DCameraIfNeeded() {
-        let center = userCoordinate
+        // Without a real fix there is no honest centre to move to, so the
+        // camera stays where the user left it.
+        guard let center = userCoordinate else { return }
         let effectivePitch = threeDMode == .off ? 0 : pitch3D
         if threeDMode != .off {
             // 3D camera (any map style) — uses the user-controlled pitch.
